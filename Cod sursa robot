@@ -1,0 +1,61 @@
+#include <AFMotor.h>
+#define st A0
+#define dr A2
+#define mid A1
+AF_DCMotor motor1(1, MOTOR12_8KHZ);
+AF_DCMotor motor2(2, MOTOR12_8KHZ);
+/*
+AF_DCMotor motor1(3, MOTOR12_8KHZ);
+AF_DCMotor motor2(4, MOTOR12_8KHZ);
+*/
+void setup() {
+ //viteza
+ motor1.setSpeed(45);
+ motor2.setSpeed(45);
+ pinMode(st,INPUT);
+ pinMode(dr,INPUT);
+ Serial.begin(9600);
+
+}
+void loop(){
+ Serial.println(analogRead(st));
+ Serial.println(analogRead(dr));
+ //oprire la linie
+ if(analogRead(st)<=400 && analogRead(dr)<=400){
+ motor1.run(RELEASE);
+ //delay(100);
+ motor2.run(RELEASE);
+ //delay(100);
+ }
+ else if(analogRead(st)<=400 && !analogRead(dr)<=400){
+ //stanga
+ delay(1);
+ motor1.run(BACKWARD);
+ motor2.run(FORWARD);
+ /*
+ motor1.run(RELEASE);
+ motor2.run(FORWARD);
+ */
+ }
+ else if(!analogRead(st)<=400 && analogRead(dr)<=400){
+ //dreapta
+ delay(1);
+ motor1.run(FORWARD);
+ motor2.run(BACKWARD);
+ /*
+ motor1.run(FORWARD);
+ motor2.run(RELEASE);
+ */
+ }
+ else if(!analogRead(st)<=400 && !analogRead(dr)<=400){
+ //fata
+ //delay(100);
+ motor1.run(FORWARD);
+ motor2.run(FORWARD);
+ /*
+ motor1.run(BACKWARD);
+ motor2.run(BACKWARD);
+ */
+ }
+
+}
